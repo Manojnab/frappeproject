@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+{% block title %}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+            <div class="jumbotron">
+                 <h2><b>Manage Library</b> <button type="button" class="btn btn-success float-right" data-toggle="modal"
+                 data-target="#mymodal">Add new book</button> <a href="/getbooks" class="btn btn-danger btn-xs">import data</a></h2>
+                {% with messages = get_flashed_messages()%}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissable" role="alert">
+                    <button class="close" type="button" data-dismiss="alert" aria-label="close">
+                        <span aria-hidden="true">X</span>
+                    </button>
+                    {{message}}
+                </div>
+
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <table class="table table-hover table-light table-border">
+                    <tr>
+                        <th>ISBN</th>
+                        <th>Book Title</th>
+                        <th>Authors</th>
+                        <th>Member ID</th>
+                        <th>Member Name</th>
+                        <th>Member Email</th>
+                        <th>Action</th>
+                    </tr>
+                    {% for row in employees %}
+                    <tr>
+                        <td>{{row.isbn}}</td>
+                        <td>{{row.title}}</td>
+                        <td>{{row.author}}</td>
+                        <td>{{row.id}}</td>
+                        <td>{{row.name}}</td>
+                        <td>{{row.email}}</td>
+
+                        <td>
+                            <a href="/issue/{{row.isbn}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.isbn}}">Issue</a>
+                            <a href="/returnbook/{{row.isbn}}" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modalreturn{{row.isbn}}">Return</a>
+
+                        </td>
+                    </tr>
+                    <div id="modaledit{{row.isbn}}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Issue Book</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{url_for('issue')}}" method="POST">
+                                 <div class="form-group">
+                                    <label>ISBN</label>
+                                    <input type="number" class="form-control" name="isbn" value="{{row.isbn}}">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" class="form-control" name="title" value="{{row.title}}">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Author</label>
+                                    <input type="text" class="form-control" name="author" value="{{row.author}}">
+
+                                </div>
+                               <div class="form-group">
+                                    <label>Member Id</label>
+                                    <input type="number" class="form-control" name="Id" value="{{row.id}}">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Member Name</label>
+                                    <input type="text" class="form-control" name="Name" value="{{row.name}}">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Member Email</label>
+                                    <input type="email" class="form-control" name="Email" value="{{row.email}}">
+
+                                </div>
+
+                                  <div class="form-group">
+                                      <button class="btn btn-primary" type="submit">issue book</button>
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secodary" type="submit" data-dismiss="modal">close</button>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+                    <div id="modalreturn{{row.isbn}}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">return Book</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{url_for('returnbook')}}" method="POST">
+                                 <div class="form-group">
+                                    <label>ISBN</label>
+                                    <input type="number" class="form-control" name="isbn" value="{{row.isbn}}">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" class="form-control" name="title" value="{{row.title}}">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Author</label>
+                                    <input type="text" class="form-control" name="author" value="{{row.author}}">
+
+                                </div>
+                               <div class="form-group">
+                                    <label>Member Id</label>
+                                    <input type="number" class="form-control" name="Id" value="{{row.id}}">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Member Name</label>
+                                    <input type="text" class="form-control" name="Name" value="{{row.name}}">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Member Email</label>
+                                    <input type="email" class="form-control" name="Email" value="{{row.email}}">
+
+                                </div>
+
+                                  <div class="form-group">
+                                      <button class="btn btn-primary" type="submit">Return book</button>
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secodary" type="submit" data-dismiss="modal">close</button>
+                        </div>
+                    </div>
+                </div>
+                    </div>
+                    {% endfor %}
+                </table>
+            </div>
+            <div id="mymodal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Book</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{url_for('insert')}}" method="post">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                    <label>ISBN</label>
+                                    <input type="number" class="form-control" name="isbn" required="1"">
+
+                                </div>
+                                    <div class="form-group">
+                                    <label>Titleeeee</label>
+                                    <input type="text" class="form-control" name="title" required="1">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Author</label>
+                                    <input type="text" class="form-control" name="author" required="1"">
+                                <div class="form-group">
+                                    <label>Id</label>
+                                    <input type="number" class="form-control" name="Id">
+
+                                </div>
+                                </div>
+
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" name="Name">
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control" name="Email">
+
+                                </div>
+
+                                  <div class="form-group">
+                                      <button class="btn btn-primary" type="submit">Add Book</button>
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secodary" type="submit" data-dismiss="modal">close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

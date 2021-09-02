@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+{% block title %}{% endblock %}
+
+{% block body %}
+Hi There
+<table class="table table-hover table-light table-border">
+                    <tr>
+                        <th>ISBN</th>
+                        <th>Book Title</th>
+                        <th>Authors</th>
+                        <th>Member ID</th>
+                        <th>Member Name</th>
+                        <th>Member Email</th>
+                        <th>Action</th>
+                    </tr>
+
+
+    {% for key in xyz %}
+
+    {% for element in xyz[key] %}
+    <tr>
+    {% for key1 in element %}
+
+         {%if key1=='isbn' %}
+         <td>{{element[key1]}}</td>
+         {% endif %}
+         {%if key1=='title' %}
+         <td>{{element[key1]}}</td>
+         {% endif %}
+         {%if key1=='authors' %}
+         <td>{{element[key1]}}</td>
+         {% endif %}
+
+
+
+    {% endfor %}
+        </tr>
+    {% endfor %}
+
+    {% endfor %}
+
+</table>
+{% endblock %}
